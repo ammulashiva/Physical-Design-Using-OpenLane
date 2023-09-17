@@ -25,7 +25,7 @@ This project is done in the course ["Advanced Physical Design using OpenLANE/Sky
         +  [Decoupling capacitors](#decoupling-capacitors)
         +  [Power Planning](#power-planning)
         +  [Pin Placement](#pin-placement)
-  * Floorplan run on OpenLANE & view in Magic](#floorplan-run-on-openlane--view-in-magic)
+  * [Floorplan run on OpenLANE & view in Magic](#floorplan-run-on-openlane--view-in-magic)
      + [Floorplanning](#Floorplanning)
      + [Floorplannong run on OpenLANE & view in Magic](#Floorplanning-run-on-openlane--view-in-magic)
      + [Placement](#Placement)
