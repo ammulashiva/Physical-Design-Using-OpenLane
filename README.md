@@ -33,6 +33,23 @@ This project is done in the course ["Advanced Physical Design using OpenLANE/Sky
   * [CELL DESIGN AND CHARACETRIZATION FLOWS](#CELL-DESIGN-AND-CHARACETRIZATION-FLOWS)
      + [Standard Cell Characterization Flow](#standard-cell-characterization-flow)
      + [Timing Characterization](#Timing-Characterizations)
+- [Day - 3 Designing Library Cell using ngspice Simulations](#Day---3-Designing-Library-Cell-using-ngspice-Simulations)
+    * [CMOS inverter ngspice simulations](#CMOS-inverter-ngspice-simulations)
+        + [IO Placer revision](#IO-Placer-revision)
+    * [SPICE Deck Creation and Simulation for CMOS inverter](#SPICE-Deck-Creation-and-Simulation-for-CMOS-inverter)
+        + [Switching Threshold Vm](#Switching-Threshold-Vm)
+    * [Lab steps to git clone vsdstdcelldesign](#Lab-steps-to-git-clone-vsdstdcelldesign)
+    * [Mask CMOS Fabrication](#Mask-CMOS-Fabrication)
+    * [SKY130 basic layer layout and LEF using inverter](#SKY130-basic-layer-layout-and-LEF-using-inverter)
+    * [Designing standard cell and SPICE extraction in MAGIC](#Designing-standard-cell-and-SPICE-extraction-in-MAGIC)
+    * [SKY130 Tech File Labs](#SKY130-Tech-File-Labs)
+        + [Create Final SPICE Deck](#Create-Final-SPICE-Deck)
+        + [Using ngspice for spice simulation](#Using-ngspice-for-spice-simulation)
+        + [Standard cell characterization of CMOS Iinverter](#Standard-cell-characterization-of-CMOS-Iinverter)
+    * [LAB exercise and DRC Challenges](#LAB-exercise-and-DRC-Challenges)
+        + [Intrdocution of Magic and Skywater DRC's](#Intrdocution-of-Magic-and-Skywater-DRC's)
+        + [Sky130s pdk intro and Steps to download labs](#Sky130s-pdk-intro-and-Steps-to-download-labs)
+
 
 
 ## Day - 1 Inception of Open-Source EDA, OpenLane and Sky130 PDK
