@@ -1,256 +1,271 @@
 # Physical-Design-Using-OpenLane
 
-# Physical-Design-Using-Openlane
+This project is done in the course ["Advanced Physical Design using OpenLANE/Sky130"](https://www.vlsisystemdesign.com/advanced-physical-design-using-openlane-sky130/) by VLSI System Design Corporation. In this project a complete RTL to GDSII flow for PicoRV32a SoC is executed with Openlane using Skywater130nm PDK. Custom designed standard cells with Sky130 PDK are also used in the flow. Timing Optimisations are carried out. Slack violations are removed. DRC is verified.
+
+
 ## Table of Contents
-- [Day - 1 Inception of Open-Source EDA, OpenLane and Sky130 PDK](#day---1-inception-of-open-source-eda-openlane-and-sky130-pdk)
-- [Acknowledgement](#acknowledgement)
-- [References](#references)
+- [Day - 1 Inception of Open-Source EDA, OpenLane and Sky130 PDK](#day-1-inception-of-open-source-eda-openlane-and-sky130-pdk)
+  * [Overview](#overview)
+  * [Inception of Opensource EDA](#inception-of-opensource-eda)
+       + [SOC Design & OpenLANE](#soc-design--openlane)
+          + [Components of opensource digital ASIC design](#components-of-opensource-digital-asic-design)
+          + [Simplified RTL2GDS Flow](#simplified-rtl2gds-flow)
+          + [OpenLANE ASIC Flow](#openlane-asic-flow)
+       + [Opensource EDA tools](#opensource-eda-tools)
+          + [OpenLANE design stages](#openlane-design-stages)
+          +  [OpenLANE Files](#openlane-files)
+          +  [Invoking OpenLANE](#invoking-openlane)
+          +  [Design Preparation Step](#design-preparation-step)
+          +  [Review of files & Synthesis step](#design-preparation-step#review-of-files-&-synthesis-step)
+- [Day - 2 Good Floorplan Vs Bad Floorplan and Introduction to Library Cells](#Day-2-Good-Floorplan-Vs-Bad-Floorplan-and-Introduction-to-Library-Cells)
+### Utilization factor and Aspect ratio
+   - [Floorplanning considerations](#floorplanning-considerations)
+     - [Utilization Factor & Aspect Ratio](#utilization-factor--aspect-ratio)
+     - [Pre-placed cells](#pre-placed-cells)
+     - [Decoupling capacitors](#decoupling-capacitors)
+     - [Power Planning](#power-planning)
+     - [Pin Placement](#pin-placement)
+     - [Floorplan run on OpenLANE & view in Magic](#floorplan-run-on-openlane--view-in-magic)
+   - [Placement](#placement)
+     - [Placement Optimization](#placement-optimization)
+     - [Placement run on OpenLANE & view in Magic](#placement-run-on-openlane--view-in-magic)
+   - [Standard Cell Design Flow](#standard-cell-design-flow)
+   - [Standard Cell Characterization Flow](#standard-cell-characterization-flow)
+   - [Timing Parameter Definitions](#timing-parameter-definitions)
 
-## Day - 1 Inception of Open-Source EDA, OpenLane and Sky130 PDK
-### Introduction to RISC-V
-RISC-V is an open-source instruction set architecture (ISA) that is adopted in the world of computer architecture and processor design. It was originally developed at the University of California, Berkeley in 2010 and has since grown into a global collaboration of researchers and industry experts. The key characteristic of RISC-V is its simplicity and modularity. It follows the Reduced Instruction Set Computer (RISC) design philosophy, which emphasizes a small and streamlined set of instructions that are easy to decode and execute. RISC-V offers a base set of instructions, called the "RV32I," which provides essential operations for general-purpose computing. Additional optional instruction sets, such as RV32F for single-precision floating-point operations or RV64G for 64-bit computing, can be added to meet specific application requirements. One of the major advantages of RISC-V is its open nature. The ISA specifications, reference implementations, and software tools are freely available, allowing anyone to study, modify, or implement their own RISC-V processors without licensing fees or restrictions. This openness has fostered a vibrant ecosystem of hardware designers, software developers, and researchers who collaborate and innovate around the RISC-V architecture.
 
-### How the software applications run on the hardware ?
-All the software applications we use in our daily lives rely on hardware to run. The system software is responsible for translating the application program into binary language, which the hardware can understand and execute. The primary components of system software include the Operating System (OS), Compiler, and Assembler. The OS plays a crucial role in managing various aspects of the computer system. It provides an environment for the application program to run and handles tasks such as memory management, process scheduling, and input/output operations. Depending on the underlying architecture, such as MIPS, x86, x64, or RISC-V, the OS translates the application program into assembly language instructions. The compiler is responsible for converting high-level programming languages, like C or Java, into assembly-level language instructions. This translation process is influenced by the specific architecture on which the software will be executed. Different architectures have their own instruction sets, and the compiler ensures that the instructions generated are compatible with the targeted architecture. Once the code is in assembly language, the assembler comes into play. It takes the assembly code and translates it into binary code, which is a sequence of 0s and 1s that can be directly dumped into the hardware.
 
-### Open-Source Digital ASIC Design
-![Opensoure ASIC req](https://github.com/KanishR1/vsd_openlane_workshop/assets/88330171/7c3b4a4d-ff10-4b12-89db-0e6c8cb6a612)
-Designing Application Specific Integraded Circuits (ASICs) basically requires three elements : RTL IPs, EDA Tools and PDKs.
+## Overview
+OpenLANE is an opensource tool or flow used for opensource tape-outs. The OpenLANE flow comprises a variety of tools such as Yosys, ABC, OpenSTA, Fault, OpenROAD app, Netgen and Magic which are used to harden chips and macros, i.e. generate final GDSII from the design RTL. The primary goal of OpenLANE is to produce clean GDSII with no human intervention. OpenLANE has been tuned to function for the Google-Skywater130 Opensource Process Design Kit.
 
-**RTL IPs**, or Register Transfer Level Intellectual Property, refer to pre-designed and pre-verified digital hardware components or blocks that are described at the Register Transfer Level (RTL). RTL is a hardware description language (HDL) representation of a digital circuit or a portion of a circuit. In the context of integrated circuit (IC) design, an IP refers to a reusable building block that can be integrated into a larger design. RTL IPs, specifically, are designed at the register transfer level, which represents the flow of data between registers and the operations performed on that data.These IPs can be licensed from IP vendors or developed in-house. They provide a level of abstraction that allows designers to focus on higher-level design aspects rather than implementing low-level details from scratch. RTL IPs offer various advantages, such as improved productivity, faster time-to-market, and increased design reliability. By using RTL IPs, designers can leverage optimized and well-tested building blocks, reducing the likelihood of errors and bugs. Additionally, using RTL IPs promotes design reuse, enabling designers to create complex systems by assembling and integrating different IP blocks.
+## Inception of Opensource EDA
 
-**EDA (Electronic Design Automation) tools** are software applications used in the design, development, and analysis of electronic systems, including integrated circuits (ICs), printed circuit boards (PCBs), and other electronic components. These tools automate various tasks involved in the design process, increasing efficiency and reducing time-to-market.
+### SoC Design & OpenLANE
 
-**Process Design Kit (PDK)** is a set of files used within the semiconductor industry to model a fabrication process for the design tools used to design an integrated circuit.  PDK’s are often specific to a foundry, and may be subject to a non-disclosure agreement.  While most PDK’s are proprietary to a foundry, certain PDKs are opensource and entirely within the public domain.Traditionally, PDKs have been proprietary and provided by semiconductor foundries, limiting access and customization options for IC designers. However, open-source PDKs aim to promote collaboration, innovation, and accessibility by making the design kit freely available to the community. By providing an open-source PDK, designers can modify and customize the kit to suit their specific requirements. This flexibility allows for greater innovation, collaboration, and knowledge sharing within the design community. It also lowers the barriers to entry for new designers and encourages participation in the development of new ICs and electronic systems. Some of the  open-source PDKs are : SKY130, GFU180, ASAP7 etc
+#### Components of opensource digital ASIC design
+The design of digital Application Specific Integrated Circuit (ASIC) requires three enablers or elements - Resistor Transistor Logic Intellectual Property (RTL IPs), Electronic Design Automation (EDA) Tools and Process Design Kit (PDK) data.
 
-### Simplified RTL to GDSII flow 
-![rtl2gds2](https://github.com/KanishR1/vsd_openlane_workshop/assets/88330171/9ebd56da-1b8f-4f62-8ab0-9a0db0a0a1fc)
-The RTL to GDSII flow basically involves :
-1. **RTL Design** -  The process begins with the RTL design phase, where the digital circuit is described using a hardware description language (HDL) like VHDL or Verilog. The RTL description captures the functional behavior of the circuit, specifying its logic and data paths.
+![ASIC](https://user-images.githubusercontent.com/86701156/124005001-35a32a80-d9f6-11eb-8fcc-0917ad337699.PNG)
 
-2. **RTL Synthesis** - RTL synthesis converts the high-level RTL description into a gate-level netlist. This stage involves mapping the RTL code to a library of standard cells (pre-designed logic elements) and optimizing the resulting gate-level representation for area, power, and timing. The output of RTL synthesis is typically in a format called the gate-level netlist.
+- Opensource RTL Designs: github, librecores, opencores
+- Opensource EDA tools: QFlow, OpenROAD, OpenLANE
+- Opensource PDK data: Google Skywater130 PDK
 
-3. **Floor and Power Planning** - is a crucial step in the digital design flow that involves partitioning the chip's area and determining the placement of major components and functional blocks. It establishes an initial high-level layout and defines the overall chip dimensions, locations of critical modules, power grid distribution, and I/O placement.The primary goals of floor planning are: Area Partitioning, Power Distribution, Signal Flow and Interconnect Planning, Placement of Key Components, Design Constraints and Optimization.
+The ASIC flow objective is to convert RTL design to GDSII format used for final layout. The flow is essentially a software also known as automated PnR (Place & route).
 
-4. **Placement** - Placement involves assigning the physical coordinates to each gate-level cell on the chip's layout. The placement process aims to minimize wirelength, optimize signal delay, and satisfy design rules and constraints. Modern placement algorithms use techniques like global placement and detailed placement to achieve an optimal placement solution.
+#### Simplified RTL2GDS Flow
 
-5. **Clock Tree Synthesis** - Clock tree synthesis (CTS) is a crucial step in the digital design flow that involves constructing an optimized clock distribution network within an integrated circuit (IC). The primary goal of CTS is to ensure balanced and efficient clock signal distribution to all sequential elements (flip-flops, registers) within the design, minimizing clock skew and achieving timing closure.
+![RTL2GDS flow](https://user-images.githubusercontent.com/86701156/124006238-a139c780-d9f7-11eb-8da9-6069b055fbe0.PNG)
 
-6. **Routing** - Routing connects the gates and interconnects on the chip based on the placement information. It involves determining the optimal paths for the wires and vias that carry signals between different components. The routing process needs to adhere to design rules, avoid congestion, and optimize for factors like signal integrity, power, and manufacturability.
+![RTLtoGDSIIflow](https://user-images.githubusercontent.com/83152452/131134578-5cd34ec9-a388-476b-aa4b-914c250d7ec9.png)
 
-7. **Sign-off** - Sign-off analysis refers to the final stage of the electronic design process, where comprehensive verification and analysis are performed to ensure that the design meets all the necessary requirements and specifications. It involves a series of checks and simulations to confirm that the design is ready for fabrication and meets the desired functionality, performance, power, and reliability targets. 
+- Synthesis: RTL Converted to gate level netlist using standard cell libraries (SCL)
+- Floor & Power Planning: Planning of silicon area to ensure robust power distribution
+- Placement: Placing cells on floorplan rows aligned with sites
+  - Global Placement: for optimal position of cells
+  - Detailed Placement: for legal positions
+- Routing: Valid patterns for wires
+- Signoff: Physical (DRC, LVS) and Timing verifications (STA)
 
-8. **GDSII File Generation** - Once the layout is verified and passes all checks, the final step is to generate the GDSII file format, which represents the complete physical layout of the chip. The GDSII file contains the geometric information necessary for fabrication, including the shapes, layers, masks, and other relevant details.
+#### OpenLANE ASIC Flow
 
-### Introduction to OpenLANE
-OpenLane is an automated RTL to GDSII flow based on several components including OpenROAD, Yosys, Magic, Netgen, CVC, SPEF-Extractor, KLayout and a number of custom scripts for design exploration and optimization. It also provides a number of custom scripts for design exploration and optimization. The flow performs all ASIC implementation steps from RTL all the way down to GDSII. Currently, it supports both A and B variants of the sky130 PDK, the C variant of the gf180mcu PDK, and instructions to add support for other (including proprietary) PDKs are documented. OpenLane abstracts the underlying open source utilities, and allows users to configure all their behavior with just a single configuration file.
 
-OpenLane integrated several key open source tools over the execution stages:
-1. RTL Synthesis, Technology Mapping, and Formal Verification : yosys + abc
-2. Static Timing Analysis: OpenSTA
-3. Floor Planning: init_fp, ioPlacer, pdn and tapcell
-4. Placement: RePLace (Global), Resizer and OpenPhySyn (formerly), and OpenDP (Detailed)
-5. Clock Tree Synthesis: TritonCTS
-6. Fill Insertion: OpenDP/filler_placement
-7. Routing: FastRoute or CU-GR (formerly) and TritonRoute (Detailed) or DR-CU
-8. SPEF Extraction: OpenRCX or SPEF-Extractor (formerly)
-9. GDSII Streaming out: Magic and KLayout
-10. DRC Checks: Magic and KLayout
-11. LVS check: Netgen
-12. Antenna Checks: Magic
-13. Circuit Validity Checker: CVC
 
-![flow_v1](https://github.com/KanishR1/vsd_openlane_workshop/assets/88330171/87ecc681-ab20-4c14-adae-a72c5cacfc70)
+![OpenLaneflow](https://user-images.githubusercontent.com/83152452/131135115-46148ff1-9489-48f6-a334-6702c25def59.png)
 
-### OpenLane Installation
-Prior to the installation of the OpenLane install the dependencies and packages using the command shown below :</br>
-``` 
-sudo apt-get update
-sudo apt-get upgrade
-sudo apt install -y build-essential python3 python3-venv python3-pip make git
+From conception to product, the ASIC design flow is an iterative process that is not static for every design. The details of the flow may change depending on ECO’s, IP requirements, DFT insertion, and SDC constraints, however the base concepts still remain. The flow can be broken down into 11 steps:
+
+1. Architectural Design – A system engineer will provide the VLSI engineer with specifications for the system that are determined through physical constraints. 
+   The VLSI engineer will be required to design a circuit that meets these constraints at a microarchitecture modeling level.
+
+2. RTL Design/Behavioral Modeling – RTL design and behavioral modeling are performed with a hardware description language (HDL). 
+   EDA tools will use the HDL to perform mapping of higher-level components to the transistor level needed for physical implementation. 
+   HDL modeling is normally performed using either Verilog or VHDL. One of two design methods may be employed while creating the HDL of a microarchitecture:
+   
+    a. RTL Design – Stands for Register Transfer Level. It provides an abstraction of the digital   circuit using:
+   
+   - i. 	 Combinational logic
+   - ii. 	 Registers
+   - iii.  Modules (IP’s or Soft Macros)
+ 
+    b. 	Behavioral Modeling – Allows the microarchitecture modeling to be performed with behavior-based modeling in HDL. This method bridges the gap between C and HDL allowing HDL design to be performed
+
+3. RTL Verification - Behavioral verification of design
+
+4. DFT Insertion - Design-for-Test Circuit Insertion
+
+5. Logic Synthesis – Logic synthesis uses the RTL netlist to perform HDL technology mapping. The synthesis process is normally performed in two major steps:
+
+     - GTECH Mapping – Consists of mapping the HDL netlist to generic gates what are used to perform logical optimization based on AIGERs and other topologies created 
+       from the generic mapped netlist.
+       
+     - Technology Mapping – Consists of mapping the post-optimized GTECH netlist to standard cells described in the PDK
+  
+6. Standard Cells – Standard cells are fixed height and a multiple of unit size width. This width is an integer multiple of the SITE size or the PR boundary. Each standard cell comes with SPICE, HDL, liberty, layout (detailed and abstract) files used by different tools at different stages in the RTL2GDS flow.
+
+7. Post-Synthesis STA Analysis: Performs setup analysis on different path groups.
+
+8. Floorplanning – Goal is to plan the silicon area and create a robust power distribution network (PDN) to power each of the individual components of the synthesized netlist. In addition, macro placement and blockages must be defined before placement occurs to ensure a legalized GDS file. In power planning we create the ring which is connected to the pads which brings power around the edges of the chip. We also include power straps to bring power to the middle of the chip using higher metal layers which reduces IR drop and electro-migration problem.
+
+9. Placement – Place the standard cells on the floorplane rows, aligned with sites defined in the technology lef file. Placement is done in two steps: Global and Detailed. In Global placement tries to find optimal position for all cells but they may be overlapping and not aligned to rows, detailed placement takes the global placement and legalizes all of the placements trying to adhere to what the global placement wants.
+
+10. CTS – Clock tree synteshsis is used to create the clock distribution network that is used to deliver the clock to all sequential elements. The main goal is to create a network with minimal skew across the chip. H-trees are a common network topology that is used to achieve this goal.
+
+11. Routing – Implements the interconnect system between standard cells using the remaining available metal layers after CTS and PDN generation. The routing is performed on routing grids to ensure minimal DRC errors.
+
+The Skywater 130nm PDK uses 6 metal layers to perform CTS, PDN generation, and interconnect routing.
+
+### Opensource EDA tools
+
+OpenLANE utilises a variety of opensource tools in the execution of the ASIC flow:
+Task | Tool/s
+------------ | -------------
+RTL Synthesis & Technology Mapping | [yosys](https://github.com/YosysHQ/yosys), abc
+Floorplan & PDN | init_fp, ioPlacer, pdn and tapcell
+Placement | RePLace, Resizer, OpenPhySyn & OpenDP
+Static Timing Analysis | [OpenSTA](https://github.com/The-OpenROAD-Project/OpenSTA)
+Clock Tree Synthesis | [TritonCTS](https://github.com/The-OpenROAD-Project/OpenLane)
+Routing | FastRoute and [TritonRoute](https://github.com/The-OpenROAD-Project/TritonRoute) 
+SPEF Extraction | [SPEF-Extractor](https://github.com/HanyMoussa/SPEF_EXTRACTOR)
+DRC Checks, GDSII Streaming out | [Magic](https://github.com/RTimothyEdwards/magic), [Klayout](https://github.com/KLayout/klayout)
+LVS check | [Netgen](https://github.com/RTimothyEdwards/netgen)
+Circuit validity checker | [CVC](https://github.com/d-m-bailey/cvc)
+
+#### OpenLANE design stages
+
+1. Synthesis
+	- `yosys` - Performs RTL synthesis
+	- `abc` - Performs technology mapping
+	- `OpenSTA` - Performs static timing analysis on the resulting netlist to generate timing reports
+2. Floorplan and PDN
+	- `init_fp` - Defines the core area for the macro as well as the rows (used for placement) and the tracks (used for routing)
+	- `ioplacer` - Places the macro input and output ports
+	- `pdn` - Generates the power distribution network
+	- `tapcell` - Inserts welltap and decap cells in the floorplan
+3. Placement
+	- `RePLace` - Performs global placement
+	- `Resizer` - Performs optional optimizations on the design
+	- `OpenDP` - Perfroms detailed placement to legalize the globally placed components
+4. CTS
+	- `TritonCTS` - Synthesizes the clock distribution network (the clock tree)
+5. Routing
+	- `FastRoute` - Performs global routing to generate a guide file for the detailed router
+	- `CU-GR` - Another option for performing global routing.
+	- `TritonRoute` - Performs detailed routing
+	- `SPEF-Extractor` - Performs SPEF extraction
+6. GDSII Generation
+	- `Magic` - Streams out the final GDSII layout file from the routed def
+	- `Klayout` - Streams out the final GDSII layout file from the routed def as a back-up
+7. Checks
+	- `Magic` - Performs DRC Checks & Antenna Checks
+	- `Klayout` - Performs DRC Checks
+	- `Netgen` - Performs LVS Checks
+	- `CVC` - Performs Circuit Validity Checks
+
+#### OpenLANE Files
+
+The openLANE file structure looks something like this:
+
+- skywater-pdk: contains PDK files provided by foundry
+- open_pdks: contains scripts to setup pdks for opensource tools 
+- sky130A: contains sky130 pdk files
+
+#### Invoking OpenLANE and Design Preparation 
+
+Openlane can be invoked using docker command followed by opening an interactive session.
+flow.tcl is a script that specifies details for openLANE flow.
+
 ```
-Docker Installation :</br>
-```
-sudo apt install apt-transport-https ca-certificates curl software-properties-common
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-
-echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-sudo apt update
-sudo apt install docker-ce docker-ce-cli containerd.io
-sudo docker run hello-world
-
-sudo groupadd docker
-sudo usermod -aG docker $USER
-sudo reboot 
-
-
-# Check for installation
-sudo docker run hello-world
-```
-
-**Steps to install OpenLane, PDKs and Tools**</br>
-```
-cd $HOME
-git clone https://github.com/The-OpenROAD-Project/OpenLane --recurse-submodules 
-cd OpenLane
-make
-make test
-cd /home/kanish/OpenLane/designs/ci
-cp -r * ../
-```
-
-### Steps to run synthesis in OpenLane:
-
-
-```
-cd ~/OpenLane
-make mount
+docker
 ./flow.tcl -interactive
 package require openlane 0.9
+```
+
+```
 prep -design picorv32a
-run_synthesis
 ```
-To view nelist
-```
-cd /home/kanish/OpenLane/designs/picorv32a/runs/RUN_2023.09.08_13.53.29/results/synthesis
-vim picorv32a.v
-```
-![pico_net](./images/pic_net.png)
 
-To view the report:
-```
-cd /home/kanish/OpenLane/designs/picorv32a/runs/RUN_2023.09.08_13.53.29/reports/synthesis
-vim 1-synthesis.AREA_0.stat.rpt
-```
-```
-Synthesis Report
-=================
+![6  openlane step - prep -design picorv32a](https://user-images.githubusercontent.com/83152452/185787631-bbd5fb79-ce07-4d4c-a058-23894c290c5d.png)
 
 
-   Number of wires:               9824
-   Number of wire bits:          10206
-   Number of public wires:        1512
-   Number of public wire bits:    1894
-   Number of memories:               0
-   Number of memory bits:            0
-   Number of processes:              0
-   Number of cells:              10104
-     sky130_fd_sc_hd__a2111o_2       2
-     sky130_fd_sc_hd__a211o_2      101
-     sky130_fd_sc_hd__a211oi_2       4
-     sky130_fd_sc_hd__a21bo_2       19
-     sky130_fd_sc_hd__a21boi_2       7
-     sky130_fd_sc_hd__a21o_2       414
-     sky130_fd_sc_hd__a21oi_2      127
-     sky130_fd_sc_hd__a221o_2       65
-     sky130_fd_sc_hd__a221oi_2       1
-     sky130_fd_sc_hd__a22o_2       197
-     sky130_fd_sc_hd__a22oi_2        2
-     sky130_fd_sc_hd__a2bb2o_2      16
-     sky130_fd_sc_hd__a311o_2       38
-     sky130_fd_sc_hd__a31o_2        90
-     sky130_fd_sc_hd__a31oi_2       10
-     sky130_fd_sc_hd__a32o_2        89
-     sky130_fd_sc_hd__a41o_2         2
-     sky130_fd_sc_hd__and2_2       283
-     sky130_fd_sc_hd__and2b_2       32
-     sky130_fd_sc_hd__and3_2        77
-     sky130_fd_sc_hd__and3b_2       76
-     sky130_fd_sc_hd__and4_2        46
-     sky130_fd_sc_hd__and4b_2        6
-     sky130_fd_sc_hd__and4bb_2       3
-     sky130_fd_sc_hd__buf_1       2735
-     sky130_fd_sc_hd__buf_2         16
-     sky130_fd_sc_hd__conb_1       106
-     sky130_fd_sc_hd__dfxtp_2     1596
-     sky130_fd_sc_hd__inv_2         83
-     sky130_fd_sc_hd__mux2_2      1817
-     sky130_fd_sc_hd__mux4_2       323
-     sky130_fd_sc_hd__nand2_2      250
-     sky130_fd_sc_hd__nand2b_2       2
-     sky130_fd_sc_hd__nand3_2       18
-     sky130_fd_sc_hd__nand3b_2       3
-     sky130_fd_sc_hd__nand4_2        2
-     sky130_fd_sc_hd__nor2_2       185
-     sky130_fd_sc_hd__nor3_2        11
-     sky130_fd_sc_hd__nor3b_2        3
-     sky130_fd_sc_hd__nor4_2         4
-     sky130_fd_sc_hd__nor4b_2        3
-     sky130_fd_sc_hd__o2111a_2       1
-     sky130_fd_sc_hd__o211a_2      224
-     sky130_fd_sc_hd__o211ai_2       6
-     sky130_fd_sc_hd__o21a_2       154
-     sky130_fd_sc_hd__o21ai_2       94
-     sky130_fd_sc_hd__o21ba_2       15
-     sky130_fd_sc_hd__o21bai_2       3
-     sky130_fd_sc_hd__o221a_2       19
-     sky130_fd_sc_hd__o221ai_2       1
-     sky130_fd_sc_hd__o22a_2        26
-     sky130_fd_sc_hd__o22ai_2        1
-     sky130_fd_sc_hd__o2bb2a_2       7
-     sky130_fd_sc_hd__o311a_2       31
-     sky130_fd_sc_hd__o311ai_2       2
-     sky130_fd_sc_hd__o31a_2        21
-     sky130_fd_sc_hd__o31ai_2        2
-     sky130_fd_sc_hd__o32a_2        14
-     sky130_fd_sc_hd__o41a_2         1
-     sky130_fd_sc_hd__or2_2        337
-     sky130_fd_sc_hd__or2b_2        20
-     sky130_fd_sc_hd__or3_2        102
-     sky130_fd_sc_hd__or3b_2        17
-     sky130_fd_sc_hd__or4_2         29
-     sky130_fd_sc_hd__or4b_2         6
-     sky130_fd_sc_hd__xnor2_2       78
-     sky130_fd_sc_hd__xor2_2        29
+#### Review of files & Synthesis step
+* A "runs" folder is generated within the picorv32a folder.
+* The merged file is created during the merging operation in the pircorv32a design preparation (it merges lef and techlef files)
+* Next, we run the synthesis of picorv32a design in the openlane interactive terminal:
 
-   Chip area for module '\picorv32': 102957.494400
+`run_synthesis`
 
+![openlane - placement - run_synthesis](https://user-images.githubusercontent.com/83152452/185788656-fd086122-f98e-4fc0-bd4e-a711555c8435.png)
+
+
+* The yosys and ABC tools are utilised to convert RTL to gate level netlist.
+* Calcuation of Flop Ratio:
+```
+Flop ratio = Number of D Flip flops 
+             ______________________
+             Total Number of cells
 ```
 
 ```
-Flop ratio = Number of D Flip flops = 1596  = 0.1579
-             ______________________   _____
-             Total Number of cells    10104
+dfxtp_4 = 1613,
+Number of cells = 14876,
+Flop ratio = 1613/14876 = 0.1084 = 10.84%
+```
+* We may check the success of the synthesis step by checking the synthesis folder for the synthesized netlist file (.v file)
+* The synthesis statistics report can be accessed within the reports directory. It is usually the last yosys file since files are listed chronologically by date of modification.
+* The synthesis timings report are as follows:
+
+![7  synthesis report-timing](https://user-images.githubusercontent.com/83152452/185787646-954e92b2-c2c0-47ed-be00-ccabd63b3cd6.png)
+
+![7  synthesis report-timing-1](https://user-images.githubusercontent.com/83152452/185787648-8672040d-418b-4202-9d3b-a148259c20a0.png)
+
+* The synthesis power report is as follows:
+
+![7  report_power](https://user-images.githubusercontent.com/83152452/185787655-bf47f6ef-eb12-412f-9e3b-ff5da6946190.png)
+
+
+
+## Floorplanning & Placement and library cells
+
+### Floorplanning considerations
+
+#### Utilization Factor & Aspect Ratio  
+
+Two parameters are of importance when it comes to floorplanning namely, Utilisation Factor and Aspect Ratio. They are defined as follows:
+
+```
+Utilisation Factor =  Area occupied by netlist
+                     __________________________
+                        Total area of core
 ```
 
-## Day - 2 Good Floorplan Vs Bad Floorplan and Introduction to Libraryt Cells
-### Utilization factor and Aspect ratio
-
-<img width="307" alt="a" src="https://github.com/KanishR1/vsd_openlane_workshop/assets/88330171/357c02fa-b849-41a1-8720-8c47094c220e">
-
 ```
-Utilization Factor = Area occupied by netlist
-                     -------------------------
-                      Total area of the core 
+Aspect Ratio =  Height
+               ________
+                Width
 ```
-```
-Aspect Ratio = Height of Core
-              ----------------
-               Width of Core
-```
-When the aspect ratio is 1, the chip is squared in shape.
+                                  
+A Utilisation Factor of 1 signifies 100% utilisation leaving no space for extra cells such as buffer. However, practically, the Utilisation Factor is 0.5-0.6. Likewise, an Aspect ratio of 1 implies that the chip is square shaped. Any value other than 1 implies rectanglular chip.
 
-### Preplaced Cells
-The pre-placed cells are typically larger and more complex modules, such as memory blocks, complex functional units, or other predefined structures that are designed separately and then positioned in the layout before the placement and routing stages. Pre-placed cells are often used for several reasons:Performance optimization, IP integration and Power optimization. The preplaced cells are reused in the designs.These pre-placed cells should be surrounded by de-coupling capacitors. Decoupling capacitors are large capacitors that store electrical charge. They have a voltage across them similar to that of the power supply. When a circuit switches, the decoupling capacitor acts as a power source for the circuit, effectively isolating it from the main power supply. During switching events, the decoupling capacitor supplies the necessary current to the circuit. To minimize voltage drops, these capacitors are positioned in close proximity to the circuit. They ensure that the circuit receives the required current during switching operations. The purpose of the decoupling capacitor is to charge the circuit. When a switching activity occurs, the decoupling capacitor transfers some of its charge to the circuit. During periods of no switching activity, the decoupling capacitor replenishes its charge from the power supply.
+#### Pre-placed cells
 
-<img width="347" alt="59" src="https://github.com/KanishR1/vsd_openlane_workshop/assets/88330171/6b36fb30-980c-48ab-8c27-895f9e740867">
+Once the Utilisation Factor and Aspect Ratio has been decided, the locations of pre-placed cells need to be defined. Pre-placed cells are IPs comprising large combinational logic which once placed maintain a fixed position. Since they are placed before placement and routing, the are known as pre-placed cells.
 
-### Decoupling Capacitor
-Decoupling capacitors constitute an indispensable element within the realm of electronic circuit design, particularly in the context of integrated circuits (ICs) and printed circuit boards (PCBs). Their primary purpose revolves around the stabilization of power supply voltage levels, a crucial function in mitigating noise and upholding consistent voltage for delicate components. As electronic apparatuses operate at elevated frequencies, abrupt shifts in current demands can incite voltage fluctuations and unwanted noise, thereby resulting in performance dilemmas and signal deterioration. Decoupling capacitors, akin to a safeguard, establish a local storehouse of electrical charge that can swiftly respond to these fluctuations. Essentially, they act as reservoirs, storing and disbursing electrical energy as required, effectively sieving out undesirable noise and voltage oscillations. 
+#### Decoupling capacitors
 
-Decoupling capacitors are strategically sited in close proximity to power-thirsty constituents, such as microprocessors, digital logic circuits, or high-speed memory modules, where they adeptly soak up and provide instant current requisites. Through curbing voltage fluctuations, they heighten the overall fidelity of signals and prevent potential issues like ground disturbance, signal interference, and electromagnetic perturbations. The physical configuration of decoupling capacitors necessitates judiciously determining the appropriate capacitance magnitude, voltage rating, and package dimensions based on the distinct requisites of the circuit. The capacitance value must adequately meet current necessities and the frequency spectrum of the circuit. Greater capacitance values promise superior noise suppression but can introduce bulkier physical dimensions and cost ramifications. Furthermore, the placement of decoupling capacitors assumes paramount importance, requiring them to be positioned as proximate as feasible to the power and ground pins of the targeted components, thereby minimizing inductance and resistance along the supply path. This close proximity ensures efficient energy transmission between the power source and the components, concurrently diminishing impedance and maximizing the capacitor's efficacy.
+Pre-placed cells must then be surrounded with decoupling capacitors (decaps). The resistances and capacitances associated with long wire lengths can cause the power supply voltage to drop significantly before reaching the logic circuits. This can lead to the signal value entering into the undefined region, outside the noise margin range. Decaps are huge capacitors charged to power supply voltage and placed close the logic circuit. Their role is to decouple the circuit from power supply by supplying the necessary amount of current to the circuit. They pervent crosstalk and enable local communication.
 
-### Power Planning
-Power planning in integrated circuit (IC) design involves the careful consideration and distribution of power and ground connections to ensure proper functionality and performance of the chip. One important aspect of power planning is the placement of multiple ground (GND) and supply voltage (VDD) points throughout the IC layout.The need for multiple GND and VDD points arises due to several reasons:By providing multiple GND and VDD points, the power can be distributed more evenly throughout the chip, reducing the chances of voltage drops and improving overall power delivery efficiency. Ground bounce occurs when there are variations in the voltage levels of different GND points due to transient currents. Similarly, power supply noise refers to fluctuations in the VDD levels caused by switching events. By strategically placing multiple GND and VDD points, the impact of ground bounce and power supply noise can be minimized, improving circuit performance and reducing the risk of functional failures.
+#### Power Planning
 
-<img width="517" alt="68" src="https://github.com/KanishR1/vsd_openlane_workshop/assets/88330171/2ba3adcf-8a1d-4ef6-9e14-11a9e5cb0608">
+Each block on the chip, however, cannot have its own decap unlike the pre-placed macros. Therefore, a good power planning ensures that each block has its own VDD and VSS pads connected to the horizontal and vertical power and GND lines which form a power mesh.
 
+#### Pin Placement
 
-### Pin Placement
-Pin placement in physical design is all about how and where we put the input/output pins on a chip or circuit board. It's important because it affects how well signals move around, how little they get messed up, and how easy it is to build and test the device. We have to think about things like keeping the signals strong, spreading out power evenly, managing heat, and making sure it fits with standard connectors and packaging. When we do this pin placement right, it makes the electronic system more reliable, easier to build, and more user-friendly.
+The netlist defines connectivity between logic gates. The place between the core and die is utilised for placing pins. The connectivity information coded in either VHDL or Verilog is used to determine the position of I/O pads of various pins. Then, logical placement blocking of pre-placed macros is performed so as to differentiate that area from that of the pin area.
 
-### Steps to perform Floorplanning and Placement
+#### Floorplan run on OpenLANE & view in Magic
+
+#### Steps to perform Floorplanning and Placement
 **Floorplanning**</br>
 To perform floor planning
 ```
@@ -335,3 +350,8 @@ Rise transition time = time(slew_high_rise_thr) - time (slew_low_rise_thr)
 
 Low transition time = time(slew_high_fall_thr) - time (slew_low_fall_thr)
 ```
+
+![3  lef file extraction](https://user-images.githubusercontent.com/83152452/185790311-f5a68ba1-9e1d-47b1-ae47-d7a6f1a723d2.png)
+
+This generates ```sky130_vsdinv.lef``` file.
+
