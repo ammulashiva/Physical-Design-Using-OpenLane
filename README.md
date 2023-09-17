@@ -287,7 +287,7 @@ To perform placemnet
 run_placement
 ```
 
-![magic_1](./Day_2/Images/magic_1.png)
+![placement_cmd](./Day_2/Images/placement_cmd.png)
 
 To view the placement in magic :
 ```
