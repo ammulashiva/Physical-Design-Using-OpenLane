@@ -267,6 +267,9 @@ To perform floor planning
 ```
 run_floorplanning
 ```
+
+![floorplan_cmd](./Day_2/Images/floorplan_cmd.png)
+
 ![magic_1](./Day_2/Images/magic_1.png)
 
 To view the floor planning in magic :
