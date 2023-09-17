@@ -295,7 +295,7 @@ cd /home/ammula-shiva-kumar/Physical-Design-Using-Openlane/OpenLane/designs/pico
 magic -T /home/ammula-shiva-kumar/.volare/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.nom.lef def read picorv32.def &
 ```
 
-![magic_1](./Day_2/Images/magic_1.png)
+![floorplan_magic](./Day_2/Images/floorplan_magic.png)
 
 
 ### CELL DESIGN AND CHARACETRIZATION FLOWS
