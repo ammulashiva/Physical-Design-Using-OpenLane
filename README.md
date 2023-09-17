@@ -271,8 +271,8 @@ run_floorplanning
 
 To view the floor planning in magic :
 ```
-cd /home/kanish/Physical-Design-Using-Openlane/OpenLane/designs/picorv32a/runs/RUN_2023.09.10_16.53.19/results/floorplanning
-magic -T /home/kanish/.volare/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.nom.lef def read picorv32.def &
+cd /home/ammula-shiva-kumar/Physical-Design-Using-Openlane/OpenLane/designs/picorv32a/runs/RUN_2023.09.10_16.53.19/results/floorplanning
+magic -T /home/ammula-shiva-kumar/.volare/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.nom.lef def read picorv32.def &
 ```
 ![magic_floorpplan](./images/magic_fp_view.png)
 
