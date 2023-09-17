@@ -377,20 +377,20 @@ Rise transition time = time(slew_high_rise_thr) - time (slew_low_rise_thr)
 Low transition time = time(slew_high_fall_thr) - time (slew_low_fall_thr)
 ```
 
-# DAY3 Design Library Cell using ngspice simulations
+## DAY3 Design Library Cell using ngspice simulations
 
-<details>
-  <summary>CMOS inverter ngspice simulations </summary>
+
+### CMOS inverter ngspice simulations
   ``ngspice``  is opesoure engine where simulations are done.
 
-  ### IO Placer revision
+  #### IO Placer revision
 
  - PnR is a iterative flow and hence, we can make changes to the environment variables in the fly to observe the changes in our design. 
  - Let us say If I want to change my pin configuration along the core from equvi distance randomly placed to someother placement, we just set that IO mode variable on command prompt as shown below
  ```
  set ::env(FP_IO_MODE) 2
 ```
-## SPICE Deck Creation and Simulation for CMOS inverter
+### SPICE Deck Creation and Simulation for CMOS inverter
 
 - Before performing a SPICE simulation we need to create SPICE Deck
 SPICE Deck provides information about the following:
@@ -406,7 +406,7 @@ Simulation of CMOS using different width and lengths. From the waveform, irrespe
 
 From the waveform we can see the characteristics are maintained  across all sizes of CMOS. So CMOS as a circuit is a robust device hence use in designing of logic gates. Parameters that define the robustness of the CMOS are
 
-## Switching Threshold Vm
+#### Switching Threshold Vm
 
 - The Switching Threshold of a CMOS inverter is the point where the Vin = Vout on the DC Transfer characreristics. 
 - At this point, both the transistors are in saturation region, means both are turned on and have high chances of current flowing driectly from VDD to Ground called Leakage current.
@@ -417,7 +417,7 @@ From the waveform we can see the characteristics are maintained  across all size
 Through transient analysis, we calculate the rise and fall delays of the CMOS by SPICE Simulation. As we know delays are calculated at 50% of the final values.
 
 
-## Lab steps to git clone vsdstdcelldesign
+#### Lab steps to git clone vsdstdcelldesign
 
 - First, clone the required mag files and spicemodels of inverter,pmos and nmos sky130. The command to clone files from github link is:
 ```
@@ -436,13 +436,8 @@ Ampersand at the end makes the next prompt line free, otherwise magic keeps the 
 ![Screenshot from 2023-09-10 12-01-56](https://github.com/alwinshaju08/Physicaldesign_openlane/assets/69166205/f5ebf20c-53c3-4c3c-b5a1-5b45e8bf685d)
 
 
-</details>
-
-<details>
-  <summary>Inception of Layout and CMOS Fabrication Process
-</summary>
   
-## Mask CMOS Fabrication
+### Mask CMOS Fabrication
 
 The 16-mask CMOS (Complementary Metal-Oxide-Semiconductor) fabrication process involves several crucial steps for creating integrated circuits. Let's break it down with some jargon:
 
@@ -491,7 +486,7 @@ This complex process results in the creation of advanced integrated circuits wit
 
 <img width="1175" alt="Screenshot 2023-09-10 at 2 13 35 PM" src="https://github.com/alwinshaju08/Physicaldesign_openlane/assets/69166205/d2359062-24fa-45d1-9cb3-de8fa4ec796f">
 
-## SKY130 basic layer layout and LEF using inverter
+### SKY130 basic layer layout and LEF using inverter
 
 - From Layout, we see the layers which are required for CMOS inverter. Inverter is, PMOS and NMOS connected together.
 - Gates of both PMOS and NMOS are connected together and fed to input(here ,A), NMOS source connected to ground(here, VGND), PMOS source is connected to VDD(here, VPWR), Drains of PMOS and NMOS are connected together and fed to output(here, Y). 
@@ -500,14 +495,14 @@ If you want to see connections between two different parts, place the cursor ove
 
 ![Screenshot from 2023-09-10 15-17-48](https://github.com/alwinshaju08/Physicaldesign_openlane/assets/69166205/69b54c77-b195-4ab3-b3f4-b68a75b45a28)
 
-### Library exchange format (.lef)
+#### Library exchange format (.lef)
 
 - The layout of a design is defined in a specific file called LEF.
 -  It includes design rules (tech LEF) and abstract information about the cells. 
     -  ```Tech LEF``` -  Technology LEF file contains information about the Metal layer, Via Definition and DRCs.
     -  ```Macro LEF``` -  Contains physical information of the cell such as its Size, Pin, their direction.
  
-## Designing standard cell and SPICE extraction in MAGIC 
+### Designing standard cell and SPICE extraction in MAGIC 
 
 -  First we need to provide bounding box width and height in tkson window. lets say that width of BBOX is 1.38u and height is 2.72u. The command to give these values to magic is
    ``` property Fixed BBOX (0 0 1.32 2.72)  ```
@@ -522,12 +517,9 @@ Inorder to know the logical functioning of the inverter, we extract the spice an
   
 ![Screenshot from 2023-09-10 15-40-43](https://github.com/alwinshaju08/Physicaldesign_openlane/assets/69166205/4a7bf59a-fabe-47b2-9a7a-dd006bd9f1bf)
 
-</details>
-
-<details>
-  <summary> SKY130 Tech File Labs </summary>
+### SKY130 Tech File Labs 
   
-## Create Final SPICE Deck
+#### Create Final SPICE Deck
 
 let us see what is inside the spice Deck
 In the spice file subcircuit(subckt), pmos and nmos node connections are defined
@@ -560,7 +552,7 @@ These voltage sources and simulation commands are defined in the Deck file.
    
 ![Screenshot from 2023-09-10 22-07-35](https://github.com/alwinshaju08/Physicaldesign_openlane/assets/69166205/5d7b3380-f67b-4a2a-b771-147e423fd0e0)
 
-## Using ngspice for spice simulation
+#### Using ngspice for spice simulation
   
 Spice Deck is done and now to run spice simulation invoke ngspice in the tool and pass the source file. 
  
@@ -573,7 +565,7 @@ On the prompt you can see the values the ngspice has taken. To see the plot, use
 ![Screenshot from 2023-09-10 22-18-54](https://github.com/alwinshaju08/Physicaldesign_openlane/assets/69166205/55cbe4f1-0e53-4dc8-9ec4-c5cb6b168c45)
 
 
-## Standard cell characterization of CMOS Iinverter 
+#### Standard cell characterization of CMOS Iinverter 
  
 characterization of the inverter standard cell depends on Four timing parameters
  
@@ -589,16 +581,16 @@ characterization of the inverter standard cell depends on Four timing parameters
  ```Cell Rise Delay : 2.21701 - 2.14989 = 0.06689ns/66.89ps ```
  ```Cell Fall Delay : 4.07816 - 4.05011 = 0.02805ns/28.05ps ```
 
- ## LAB exercise and DRC Challenges
+ ### LAB exercise and DRC Challenges
 
-## Intrdocution of Magic and Skywater DRC's
+#### Intrdocution of Magic and Skywater DRC's
 
   - In-depth overview of Magic's DRC engine
   - Introduction to Google/Skywater DRC rules
   - Lab : Warm-up exercise : Fixing a simple rule error
   - Lab : Main exercie : Fixing or create a complex error
 
- # Sky130s pdk intro and Steps to download labs
+ #### Sky130s pdk intro and Steps to download labs
   
   - setup to view the layouts
   - For extracting and generating views, Google/skywater repo files were built with Magic
@@ -673,6 +665,6 @@ spacing xhrpoly,uhrpoly,xpc allpolynonres 480 touching_illegal \
 ![Screenshot from 2023-09-10 23-15-04](https://github.com/alwinshaju08/Physicaldesign_openlane/assets/69166205/13aa309a-c2a7-427a-aae9-780a32229150)
 
 
-</details>
+
 
 
