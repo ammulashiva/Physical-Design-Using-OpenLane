@@ -185,7 +185,7 @@ package require openlane 0.9
 prep -design picorv32a
 ```
 
-![6  openlane step - prep -design picorv32a](https://user-images.githubusercontent.com/83152452/185787631-bbd5fb79-ce07-4d4c-a058-23894c290c5d.png)
+Day_1/images/invoke_openlane.png
 
 
 #### Review of files & Synthesis step
