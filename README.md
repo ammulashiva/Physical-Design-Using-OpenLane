@@ -208,8 +208,8 @@ Flop ratio = Number of D Flip flops
 
 ```
 dfxtp_4 = 1596,
-Number of cells = 1,
-Flop ratio = 1596/1 = 0.1084 = 10.84%
+Number of cells = 10104,
+Flop ratio = 1596/10104 = 0.1579 = 15.79%
 ```
 * We may check the success of the synthesis step by checking the synthesis folder for the synthesized netlist file (.v file)
 * The synthesis statistics report can be accessed within the reports directory. It is usually the last yosys file since files are listed chronologically by date of modification.
