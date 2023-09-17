@@ -18,14 +18,14 @@ This project is done in the course ["Advanced Physical Design using OpenLANE/Sky
           +  [Design Preparation Step](#design-preparation-step)
           +  [Review of files & Synthesis step](#design-preparation-step#review-of-files-&-synthesis-step)
 - [Day - 2 Good Floorplan Vs Bad Floorplan and Introduction to Library Cells](#Day-2-Good-Floorplan-Vs-Bad-Floorplan-and-Introduction-to-Library-Cells)
-### Utilization factor and Aspect ratio
-   - [Floorplanning considerations](#floorplanning-considerations)
-     - [Utilization Factor & Aspect Ratio](#utilization-factor--aspect-ratio)
-     - [Pre-placed cells](#pre-placed-cells)
-     - [Decoupling capacitors](#decoupling-capacitors)
-     - [Power Planning](#power-planning)
-     - [Pin Placement](#pin-placement)
-     - [Floorplan run on OpenLANE & view in Magic](#floorplan-run-on-openlane--view-in-magic)
+  * Utilization factor and Aspect ratio
+     + [Floorplanning considerations](#floorplanning-considerations)
+     +  [Utilization Factor & Aspect Ratio](#utilization-factor--aspect-ratio)
+     +  [Pre-placed cells](#pre-placed-cells)
+     +  [Decoupling capacitors](#decoupling-capacitors)
+     +  [Power Planning](#power-planning)
+     +  [Pin Placement](#pin-placement)
+  * Floorplan run on OpenLANE & view in Magic](#floorplan-run-on-openlane--view-in-magic)
    - [Placement](#placement)
      - [Placement Optimization](#placement-optimization)
      - [Placement run on OpenLANE & view in Magic](#placement-run-on-openlane--view-in-magic)
@@ -259,9 +259,10 @@ Each block on the chip, however, cannot have its own decap unlike the pre-placed
 
 The netlist defines connectivity between logic gates. The place between the core and die is utilised for placing pins. The connectivity information coded in either VHDL or Verilog is used to determine the position of I/O pads of various pins. Then, logical placement blocking of pre-placed macros is performed so as to differentiate that area from that of the pin area.
 
-#### Floorplan run on OpenLANE & view in Magic
+### Floorplan run on OpenLANE & view in Magic
 
 #### Steps to perform Floorplanning and Placement
+
 **Floorplanning**</br>
 To perform floor planning
 ```
