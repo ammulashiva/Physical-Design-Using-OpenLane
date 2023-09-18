@@ -49,7 +49,7 @@ This project is done in the course ["Advanced Physical Design using OpenLANE/Sky
     * [LAB exercise and DRC Challenges](#LAB-exercise-and-DRC-Challenges)
         + [Intrdocution of Magic and Skywater DRC's](#Intrdocution-of-Magic-and-Skywater-DRC's)
         + [Sky130s pdk intro and Steps to download labs](#Sky130s-pdk-intro-and-Steps-to-download-labs)
-- [Day - 4 Pre-layout Timing Analysis and Importance of Good Clock Tree](#Pre-layout Timing Analysis and Importance of Good Clock Tree)
+- [Day - 4 Pre-layout Timing Analysis and Importance of Good Clock Tree](#Pre---layout-Timing-Analysis-and-Importance-of-Good-Clock-Tree)
      * [Timimg Modelling using Delay Models Standard Cell LEF generation](#Timimg-Modelling-using-Delay-Models-Standard-Cell-LEF-generation)
           + [Guidelines for making a standard cell](#Guidelines-for-making-a-standard-cell)
           + [Creation of Ports](#Creation-of-Ports)
