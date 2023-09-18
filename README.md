@@ -59,7 +59,7 @@ This project is done in the course ["Advanced Physical Design using OpenLANE/Sky
           + [Delay table](#Delay-table)
           + [Custom Cell inclusion in OpenLane Flow](#Custom-Cell-inclusion-in-OpenLane-Flow)
      * [Timing Analysis with Ideal Clocks using OpenSTA Set-up Timing Analysis](#Timing-Analysis-with-Ideal-Clocks-using-OpenSTA-Set---up-Timing-Analysis)
-            + [Post-Synthesis Analysis using OpenSTA](#Post---Synthesis-Analysis-using-OpenSTA)
+        + [Post-Synthesis Analysis using OpenSTA](#Post---Synthesis-Analysis-using-OpenSTA)
      * [ Clock Tree Synthesis TritonCTS and Signal Integrity Clock Tree Synthesis (CTS)](#Clock-Tree-Synthesis-TritonCTS-and-Signal-Integrity-Clock-Tree-Synthesis-(CTS))
             + [Crosstalk and clock net shielding in VLSI](#Crosstalk-and-clock-net-shielding-in-VLSI)
             + [LAB Continued](#LAB-Continued)
