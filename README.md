@@ -790,14 +790,14 @@ lef write
 ```
 - Upon checking the directory, we can see the lef file being generated.
 
-![lef file](./Day_4/Images/lef file.png)
+![lef_file](./Day_4/Images/lef_file.png)
 
 - lef file generated.
 	
 ![lef_in_file](./Day_4/Images/lef_in_file.png)
 
 ***Including Custom Cell ASIC Design***
-- First, we transfer the lef file generated ```sky130_shant.lef``` into the ```/home/shant/OpenLane/designs/picorv32a/src``` directory.
+- First, we transfer the lef file generated ```sky130_shant.lef``` into the ```/home/ammula-shiva-kumar/OpenLane/designs/picorv32a/src``` directory.
 - Then we will transfer the ```sky130_fd_sc_hd__fast.lib```, ```sky130_fd_sc_hd__slow.lib``` and ```sky130_fd_sc_hd__typical.lib``` into the same directory.
 
 - For this, we edit the config.json file as below
@@ -873,7 +873,7 @@ run_placement
 
 ![custom_cell](./Day_5/Images/custom_cell.png)
 
-- The cell manager shows that the custom cell ```sky130_shant``` has been instantiated. We try to located the cell view now. 
+- The cell manager shows that the custom cell ```sky130_vsdinv``` has been instantiated. We try to located the cell view now. 
 
 ![custom_cell_](./Day_5/Images/custom_cell_.png)
 
@@ -921,7 +921,7 @@ Since clock tree synthesis has not been performed yet, the analysis is with resp
 - Review maximum fanout of cells and replace cells with high fanout
 - sdc file for OpenSTA is modified.
 
-base.sdc is located in ```vsdstdcelldesigns/extras``` directory. So, we copy it into our design folder using ```cp my_base.sdc /home/emil/OpenLane/designs/picorv32a/src/```
+base.sdc is located in ```vsdstdcelldesigns/extras``` directory. So, we copy it into our design folder using ```cp my_base.sdc /home/ammula-shiva-kumar/OpenLane/designs/picorv32a/src/```
 
 ![my_base_sdc](./Day_4/Images/my_base_sdc.png)
 
@@ -1010,15 +1010,15 @@ run_cts
 
 ```bash
 openroad
-read_lef /home/shant/OpenLane/designs/picorv32a/runs/RUN_2023.09.11_06.05.06/tmp/merged.nom.lef 
-read_def /home/shant/OpenLane/designs/picorv32a/runs/RUN_2023.09.11_06.05.06/results/cts/picorv32.def 
-read_verilog /home/shant/OpenLane/designs/picorv32a/runs/RUN_2023.09.11_06.05.06/results/synthesis/picorv32.v
+read_lef /home/ammula-shiva-kumar/OpenLane/designs/picorv32a/runs/RUN_2023.09.11_06.05.06/tmp/merged.nom.lef 
+read_def /home/ammula-shiva-kumar/OpenLane/designs/picorv32a/runs/RUN_2023.09.11_06.05.06/results/cts/picorv32.def 
+read_verilog /home/ammula-shiva-kumar/OpenLane/designs/picorv32a/runs/RUN_2023.09.11_06.05.06/results/synthesis/picorv32.v
 write_db pico_cts.db
 read_db pico_cts.db
-read_verilog /home/shant/OpenLane/designs/picorv32a/runs/RUN_2023.09.11_06.05.06/results/synthesis/picorv32.v
+read_verilog /home/ammula-shiva-kumar/OpenLane/designs/picorv32a/runs/RUN_2023.09.11_06.05.06/results/synthesis/picorv32.v
 link_design picorv32
 read_liberty $::env(LIB_SYNTH_COMPLETE)
-read_sdc /home/shant/OpenLane/designs/picorv32a/src/my_base.sdc
+read_sdc /home/ammula-shiva-kumar/OpenLane/designs/picorv32a/src/my_base.sdc
 set_propagated_clock (all_clocks)
 report_checks -path_delay min_max -format full_clock_expanded -digits 4
 ```
@@ -1174,7 +1174,7 @@ run_routing
 magic -T ~/.volare/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.nom.lef def read picorv32.def &
 ```
 
-- We can see the custom cell ```sky130_shant``` being instantiated in the routed layout.
+- We can see the custom cell ```sky130_vsdinv``` being instantiated in the routed layout.
 
 ![custom_cell](./Day_5/Images/custom_cell.png)
 
