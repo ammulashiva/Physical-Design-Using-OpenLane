@@ -782,7 +782,7 @@ met5 Y 1.70 3.40
 ![image](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/cdf67c2a-a4c3-4757-9973-07ed07d6388f)
 
 
-***Extraction of LEF file***
+#### Extraction of LEF file
 
 - Name the custom cell through tkcon window as ```sky130_shant.mag```.
 - We generate lef file by command:
@@ -841,7 +841,7 @@ lef write
 - Static timing analysis (STA) log file
 ![Screenshot from 2023-09-16 18-13-30](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/1a407d3f-d962-44a6-ad52-c4f2a0e2e355)
 
-### *Delay Table*
+#### Delay Table
 
 Delay is a parameter that has huge impact on our cells in the design. Delay decides each and every other factor in timing. For a cell with different size, threshold voltages, delay model table is created where we can it as timing table. 
 
@@ -855,7 +855,7 @@ When the algorithm works with these delay tables, it utilizes the provided input
 
 ![image](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/a800ffa4-5dd7-46d8-9be8-ff0869268807)
 
-***Custom Cell inclusion in OpenLane Flow***
+#### Custom Cell inclusion in OpenLane Flow
 
 - We have seen till the synthesis for the custom standard cell in OpenLane flow, and verified the synthesis and STA log files. We will pick it from there now.
 - First check the slack for the synthesis.
@@ -879,13 +879,9 @@ run_placement
 
 
  
-</details>
+#### Timing Analysis with Ideal Clocks using OpenSTA 
 
-<details>
-
-<summary><strong> Timing Analysis with Ideal Clocks using OpenSTA </strong></summary>
-
-***Set-up Timing Analysis***
+#### Set-up Timing Analysis
 
 - Right now, we will consider the ideal clocks, thus the clock tree are not yet made.
 - We take a single clock and anlysis launch and capture flops.
@@ -911,7 +907,7 @@ run_placement
 
 ![image](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/7f3c072c-14b7-4f30-8748-d8c9e865d2cc)
 
-***Post-Synthesis Analysis using OpenSTA***
+#### Post-Synthesis Analysis using OpenSTA
 
 Timing analysis is carried out outside the OpenLANE flow using OpenSTA tool. For this, pre_sta.conf is required to carry out the STA analysis. Invoke OpenSTA outside the openLANE flow as follows:
 
@@ -933,14 +929,10 @@ From the timing report, we can improve slack by upsizing the cells i.e., by repl
 
 Since clock is propagated only once we do CTS, *In placement stage, clock is considered to be ideal.* So only setup slack is taken into consideration before CTS.
 
-</details>
+### Clock Tree Synthesis TritonCTS and Signal Integrity 
 
+#### Clock Tree Synthesis (CTS)
 
-<details>
-
-<summary><strong> Clock Tree Synthesis TritonCTS and Signal Integrity </strong></summary>
-
-***Clock Tree Synthesis (CTS)***
 - This plays a vital role in the creation of integrated circuits (ICs), particularly in the realm of digital electronics, where precise timing is of utmost importance. CTS involves the establishment of an organized network or structure of pathways for distributing the clock signal within the IC. This meticulous process guarantees that the clock signal effectively reaches all the sequential components, such as flip-flops and registers, in a synchronized and punctual fashion.
 - It can be implemeted in various ways and the choice of the specific technique depends on the design requirements, constraints, and goals.
 
@@ -962,19 +954,21 @@ Since clock is propagated only once we do CTS, *In placement stage, clock is con
     Adaptive CTS techniques adjust the clock tree structure dynamically based on the timing and congestion constraints of the design. This approach allows for greater flexibility and adaptability in meeting design goals but may be more complex to implement.
 
 
-***Crosstalk in VLSI***
+#### Crosstalk in VLSI
+
 - Crosstalk in VLSI refers to unwanted interference or coupling between adjacent conductive traces or wires on an integrated circuit (IC) or chip.
 - It occurs when the electrical signals on one wire influence or disrupt the signals on neighboring wires.Uncontrolled crosstalk can lead to data corruption, timing violations, and increased power consumption.
 - *Mitigation*: VLSI designers employ various techniques to mitigate crosstalk, such as optimizing layout and routing, using appropriate shielding, implementing proper clock distribution strategies, and utilizing clock gating to reduce dynamic power consumption when logic is idle
 
-***Clock net sheilding in VLSI***
+#### Clock net sheilding in VLSI
+
 - Clock net shielding in VLSI refers to a technique used to protect the clock signal from interference or crosstalk. The clock signal is critical for synchronizing the operations of various components on a chip, and any interference can lead to timing issues and performance problems.
 - VLSI designers may use shielding techniques to isolate the clock network from other signals, reducing the risk of interference. This can include dedicated clock routing layers, clock tree synthesis algorithms, and buffer insertion to manage clock distribution more effectively.
 - VLSI designs often have multiple clock domains. Shielding and proper clock gating help ensure that clock signals do not propagate between domains, avoiding metastability issues and maintaining synchronization.
 
 *Note* - *In this stage clock is propagated and make sure that clock reaches each and every clock pin from clock source with mininimum skew and insertion delay. Inorder to do this, we implement H-tree using mid point strategy. For balancing the skews, we use clock invteres or bufferes in the clock path. Before attempting to run CTS in TritonCTS tool, if the slack was attempted to be reduced in previous run, the netlist may have gotten modified by cell replacement techniques. Therefore, the verilog file needs to be modified using the ```write_verilog``` command. Then, the synthesis, floorplan and placement is run again.*
 
-***LAB Continued***
+#### LAB
 
 We will continue after the synthesis, floorplan and placement. We run the CTS as 
 
@@ -988,16 +982,12 @@ run_cts
 
 ![image](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/3adae859-7f27-4c68-a170-2b60bfce8b82)
 
-- We note the setup slack as ``` 13.31 ``` and hold slack as ``` 0.35 ```. Therefore, we are not in violation for timing constrints. 
- 
-</details>
+- We note the setup slack as ``` 13.31 ``` and hold slack as ``` 0.35 ```. Therefore, we are not in violation for timing constrints.
+   
+### Timing Analysis with Real Clocks using OpenSTA 
 
+#### Setup Timing Analysis using Real Clocks
 
-<details>
-
-<summary><strong> Timing Analysis with Real Clocks using OpenSTA </strong></summary>
-
-***Setup Timing Analysis using Real Clocks***
 - Analyzing setup time is a crucial element of designing digital circuits, especially in synchronous digital systems.
 - It pertains to the duration during which a signal must remain steady and valid prior to the arrival of the clock edge.
 - Guaranteeing the fulfillment of setup time prerequisites is vital for averting data errors and securing the correct functioning of the digital circuit.
@@ -1013,14 +1003,15 @@ run_cts
 
 - Meeting setup time requrirements is cruical for a good digital circuit operation. If not done can result in data errors and multifunctioning of the circuit.
 
-***Holding Timing Analysis using Real Clock***
+#### Holding Timing Analysis using Real Clock
+
 - Analysis of hold time is an equally vital component of digital circuit design, especially in synchronous systems.
 - It concerns the minimum duration during which a data input (D) needs to maintain its stability and validity after the clock edge before any changes can occur.
 - Ensuring that hold time requirements are met is essential to prevent data corruption and ensure the proper operation of digital circuits.
 
 ![image](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/7a6c57f6-5307-4aea-9324-626f6c665268)
 
-***LAB Continued***
+#### LAB
 
 ```bash
 openroad
@@ -1047,21 +1038,17 @@ report_checks -path_delay min_max -format full_clock_expanded -digits 4
 
 
  
-</details>
 
 
 
 
 
+### DAY 5 - Final Step for RTL2GDS using tritonRoute and OpenSTA
 
+#### Routing and Design Rule Check 
 
-## DAY 5 - Final Step for RTL2GDS using tritonRoute and OpenSTA
+#### Maze Routing and Lee's Algorithm
 
-<details>
-
-<summary><strong> Routing and Design Rule Check </strong></summary>
-
-***Maze Routing and Lee's Algorithm***
 - Routing is the process of establishing a physical connection between two pins. Algorithms designed for routing take source and target pins and aim to find the most efficient path between them, ensuring a valid connection exists.
 - The Maze Routing algorithm, such as the Lee algorithm, is one approach for solving routing problems.Here a grid similar to the one created during cell customization is utilized for routing purposes.
 - The Lee algorithm starts with two designated points, the source and target, and leverages the routing grid to identify the shortest or optimal route between them.
@@ -1074,19 +1061,17 @@ report_checks -path_delay min_max -format full_clock_expanded -digits 4
 
 ![image](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/5e50c695-e368-4106-ac56-478b4153773d)
 
-***Design Rule Check***
+#### Design Rule Check
+
 - Design rule checks are physical checks of metal width, pitch and spacing requirement for the different layers which depend on different technology nodes.It verifies whether a design meets the predefined process technology rules given by the foundry for its manufacturing.
 
 - The layout of a design must be in accordance with a set of predefined technology rules given by the foundry for manufacturability. After completion of the layout and its physical connection, an automatic program will check each and every polygon in the design against these design rules and report any violations.
 
 ![image](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/b7282031-7657-43cb-8f20-fa9453a5ec57)
  
-</details>
 
 
-<details>
-
-<summary><strong> Power Distribution Network and Routing </strong></summary>
+### Power Distribution Network and Routing
 
 - Unlike the general ASIC flow, Power Distribution Network generation is not a part of floorplan run in OpenLANE. PDN must be generated after CTS and post-CTS STA analyses:
 - We can check whether PDN has been created or no by check the current def environment variable:  ``` echo $::env(CURRENT_DEF) ```
@@ -1119,12 +1104,7 @@ gen_pdn
 
 
 
-</details>
-
-
-<details>
-
-<summary><strong> Routing </strong></summary>
+### Routing 
 
 In the realm of routing within Electronic Design Automation (EDA) tools, such as both OpenLANE and commercial EDA tools, the routing process is exceptionally intricate due to the vast design space. To simplify this complexity, the routing procedure is typically divided into two distinct stages: Global Routing and Detailed Routing.
 
@@ -1137,7 +1117,8 @@ In the realm of routing within Electronic Design Automation (EDA) tools, such as
      Here, finer grid granularity and routing guides are employed to implement the physical wiring. The "tritonRoute" engine comes into play at this stage. "Fast Route" generates initial routing guides, while "Triton Route" utilizes the Global Route information and further refines the routing, employing various strategies and optimizations to determine the most optimal path for connecting the pins.
 
 
-***Key Features of TritonRoute***
+#### Key Features of TritonRoute
+
 - *Initial Detail Routing*:
 
   TritonRoute initiates the detailed routing process, providing the foundation for the subsequent routing steps.
@@ -1164,7 +1145,7 @@ In the realm of routing within Electronic Design Automation (EDA) tools, such as
 
 Assumes route guide for each net satisfy inter guide connectivity Same metal layer with touching guides or neighbouring metal layers with nonzero vertically overlapped area( via are placed ).each unconnected termial i.e., pin of a standard cell instance should have its pin shape overlapped by a routing guide( a black dot(pin) with purple box(metal1 layer))
 
-### TritonRoute problem statement
+### #TritonRoute problem statement
 ```bash
 Inputs : LEF, DEF, Preprocessed route guides
 Output : Detailed routing solution with optimized wire length and via count
@@ -1175,7 +1156,7 @@ The space where the detailed route takes place has been defined. Now TritonRoute
 
 - *Access Point(AP)* : An on-grid point on the metal of the route guide, and is used to connect to lower-layer segments, pins or IO ports,upper-layer segments. Access Point Cluster(APC) : A union of all the Aps derived from same lower-layer segment, a pin or an IO port, upper-layer guide.
 
-***TritonRoute run for routing***
+#### TritonRoute run for routing
 
 Make sure the CURRENT_DEF is set to pdn.def
 
@@ -1191,7 +1172,7 @@ run_routing
 ![Screenshot from 2023-09-17 16-54-35](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/4bbff2fc-76e0-4189-9ba2-1132cc9a2acb)
 
 
-***Layout in magic tool post routing***
+#### Layout in magic tool post routing
 
 - The design can be viewed on magic within results/routing directory. Run the follwing command in that directory: 
 
@@ -1208,10 +1189,9 @@ magic -T ~/.volare/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merge
 
 ![Screenshot from 2023-09-18 10-20-28](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/e0a598be-aa86-450b-8a63-42583523d9c6)
 
-</details>
 
 
-## Reference 
+### Reference 
 - https://www.vsdiat.com
 - https://github.com/KanishR1
 - http://opencircuitdesign.com/magic
