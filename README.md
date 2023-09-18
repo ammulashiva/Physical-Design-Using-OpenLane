@@ -49,6 +49,36 @@ This project is done in the course ["Advanced Physical Design using OpenLANE/Sky
     * [LAB exercise and DRC Challenges](#LAB-exercise-and-DRC-Challenges)
         + [Intrdocution of Magic and Skywater DRC's](#Intrdocution-of-Magic-and-Skywater-DRC's)
         + [Sky130s pdk intro and Steps to download labs](#Sky130s-pdk-intro-and-Steps-to-download-labs)
+-[Day - 4 Pre-layout Timing Analysis and Importance of Good Clock Tree](#Pre-layout Timing Analysis and Importance of Good Clock Tree)
+     * [Timimg Modelling using Delay Models Standard Cell LEF generation](#Timimg-Modelling-using-Delay-Models-Standard-Cell-LEF-generation)
+          + [Guidelines for making a standard cell](#Guidelines-for-making-a-standard-cell)
+          + [Creation of Ports](#Creation-of-Ports)
+          + [Port Class and Port Use Attributes](#Port-Class-and-Port-Use-Attributes)
+          + [Extraction of LEF file](#Extraction-of-LEF-file)
+          + [Including Custom Cell ASIC Design](#Including-Custom-Cell-SIC-Design)
+          + [Delay table](#Delay-table)
+          + [Custom Cell inclusion in OpenLane Flow](#Custom-Cell-inclusion-in-OpenLane-Flow)
+      * [ Timing Analysis with Ideal Clocks using OpenSTA Set-up Timing Analysis](#Timing-Analysis-with-Ideal-Clocks-using-OpenSTA-Set---up-Timing-Analysis)
+            + [Post-Synthesis Analysis using OpenSTA](#Post---Synthesis-Analysis-using-OpenSTA)
+      * [ Clock Tree Synthesis TritonCTS and Signal Integrity Clock Tree Synthesis (CTS)](#Clock-Tree-Synthesis-TritonCTS-and-Signal-Integrity-Clock-Tree-Synthesis-(CTS))
+            + [Crosstalk and clock net shielding in VLSI](#Crosstalk-and-clock-net-shielding-in-VLSI)
+            + [LAB Continued](#LAB-Continued)
+      * [ Timing Analysis with Real Clocks using OpenSTA Setup Timing Analysis using Real Clocks](#Timing-Analysis-with-Real-Clocks-using-OpenSTA-Setup-Timing-Analysis-using-Real-Clocks)
+            + [Holding Timing Analysis using Real Clock](#Holding-Timing-Analysis-using-Real-Clock)
+            + [Lab](#Lab)
+-[Day - 5  Final Step for RTL2GDS using tritonRoute and OpenSTA](#Final-Step-for-RTL2GDS-using-tritonRoute-and-OpenSTA)
+       * [Routing and Design Rule Check](#Routing-and-Design-Rule-Check)
+            + [Maze Routing and Lee's Algorithm](#Maze-Routing-and-Lee's-Algorithm)
+            + [Design Rule Check](#Design-Rule-Check)
+       * [ Power Distribution Network and Routing](#Power-Distribution-Network-and-Routing)
+       * [ Routing](#Routing)
+            + [Key Features of TritonRoute](#Key-Features-of-TritonRoute)
+            + [TritonRoute problem statement](#TritonRoute-problem-statement)
+            + [Layout in magic tool post routing](#Layout-in-magic-tool-post-routing)
+       *[Reference](#Reference)
+         
+         
+             
 
 
 
@@ -665,20 +695,17 @@ spacing xhrpoly,uhrpoly,xpc allpolynonres 480 touching_illegal \
 ![Screenshot from 2023-09-10 23-15-04](https://github.com/alwinshaju08/Physicaldesign_openlane/assets/69166205/13aa309a-c2a7-427a-aae9-780a32229150)
 
 
-## DAY 4 - Pre-layout Timing Analysis and Importance of Good Clock Tree
+### DAY 4 - Pre-layout Timing Analysis and Importance of Good Clock Tree
 
-<details>
+#### Timimg Modelling using Delay Models
 
-<summary><strong>Timimg Modelling using Delay Models</strong></summary>
-
-***Standard Cell LEF generation***
+#### Standard Cell LEF generation
 
 During Placement, entire mag information is not necessary. Only the PR boundary, I/O ports, Power and ground rails of the cell is required. This information is defined in LEF file. The main objective is to extract lef from the mag file and plug into our design flow.
-
-***Grid into Track***
+### Grid into Track
 - *Track*: A path or a line on which metal layers are drawn for routing. Track is used to define the height of the standard cell.
 
-***Guidelines for making a standard cell***
+### Guidelines for making a standard cell
 - I/O ports must lie on the intersection on Horizontal and vertical tracks.
 - Width of standard cell is odd mutliples of Horizontal track pitch or X direction pitch.
 - Height of standard cell is odd mutliples of Vertical track pitch or y direction pitch.
@@ -711,7 +738,8 @@ met5 Y 1.70 3.40
 - The second condition is also verified. The X-pitch is 0.46 and we can see that the standard cell is 3 times that, thus an odd multiple. 
 - The same can be verified for the height of the standard cell.
 
-***Creation of Ports***
+#### Creation of Ports
+
 - Once the layout is ready, the next step is extracting LEF file for the cell.
 - Certain properties and definitions need to be set to the pins of the cell. For LEF files, a cell that contains ports is written as a macro cell, and the ports are the declared as PINs of the macro.
 - Our objective is to extract LEF from a given layout (here of a simple CMOS inverter) in standard format. Defining port and setting correct class and use attributes to each port is the first step.
@@ -727,7 +755,7 @@ met5 Y 1.70 3.40
   - For power and ground layers, the definition could be same or different than the signal layer. Here, ground and power connectivity are taken from metal1 (Notice the sticky label). 
  
 
-***Port Class and Port Use Attributes***
+#### Port Class and Port Use Attributes
 - After defining ports, the next step is setting port class and port use attributes.
 
 - Select port A in magic:
