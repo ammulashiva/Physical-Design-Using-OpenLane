@@ -710,7 +710,7 @@ During Placement, entire mag information is not necessary. Only the PR boundary,
 - Width of standard cell is odd mutliples of Horizontal track pitch or X direction pitch.
 - Height of standard cell is odd mutliples of Vertical track pitch or y direction pitch.
 
-The information regarding the tracks is given in ```/home/shant/.volare/sky130A/libs.tech/openlane/sky130_fd_sc_hd/tracks.info```
+The information regarding the tracks is given in ```/home/ammula-shiva-kumar/.volare/sky130A/libs.tech/openlane/sky130_fd_sc_hd/tracks.info```
 ```bash
 li1 X 0.23 0.46
 li1 Y 0.17 0.34
@@ -783,7 +783,7 @@ met5 Y 1.70 3.40
 
 #### Extraction of LEF file
 
-- Name the custom cell through tkcon window as ```sky130_shant.mag```.
+- Name the custom cell through tkcon window as ```sky130_vsdinv.mag```.
 - We generate lef file by command:
 ```bash
 lef write
