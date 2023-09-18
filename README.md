@@ -1059,7 +1059,7 @@ report_checks -path_delay min_max -format full_clock_expanded -digits 4
 
 - This algorithm however has high run time and consume a lot of memory thus more optimized routing algorithm is preferred .
 
-![image](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/5e50c695-e368-4106-ac56-478b4153773d)
+![algo](./Day_5/Images/algo.png)
 
 #### Design Rule Check
 
@@ -1067,8 +1067,7 @@ report_checks -path_delay min_max -format full_clock_expanded -digits 4
 
 - The layout of a design must be in accordance with a set of predefined technology rules given by the foundry for manufacturability. After completion of the layout and its physical connection, an automatic program will check each and every polygon in the design against these design rules and report any violations.
 
-![image](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/b7282031-7657-43cb-8f20-fa9453a5ec57)
- 
+![lay_geo_ter](./Day_5/Images/lay_geo_ter.png)
 
 
 ### Power Distribution Network and Routing
@@ -1080,11 +1079,11 @@ report_checks -path_delay min_max -format full_clock_expanded -digits 4
 gen_pdn
 ```
 
-![Screenshot from 2023-09-17 15-35-38](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/05c46f44-4ff4-410c-99be-d45f0a92fcf7)
+![gen_pdn_cmd](./Day_5/Images/gen_pdn_cmd.png)
 
 - log file generated
 
-![Screenshot from 2023-09-17 15-38-59](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/791fa081-2d0b-4a61-b155-afe7cac9e35a)
+![pdnlog](./Day_5/Images/pdnlog.png)
 
 - gen_pdn Generates the power distribution network.
 
@@ -1100,8 +1099,7 @@ gen_pdn
 
 - Here are definitions for the straps and the rails. In this design, straps are at metal layer 4 and 5 and the standard cell rails are at the metal layer 1. Vias connect accross the layers as required.
 
-![image](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/46790b86-9fde-4c1d-aabd-a49b5366f4d4)
-
+![soc](./Day_5/Images/soc.png)
 
 
 ### Routing 
@@ -1165,12 +1163,13 @@ Make sure the CURRENT_DEF is set to pdn.def
 ```bash
 run_routing
 ```
-![Screenshot from 2023-09-17 16-51-37](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/740bd3c9-e103-4d8b-a646-ee524d2275a5)
+
+![run_syn_pla_cts](./Day_5/Images/run_syn_pla_cts.png)
 
 - Log file
 
-![Screenshot from 2023-09-17 16-54-35](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/4bbff2fc-76e0-4189-9ba2-1132cc9a2acb)
 
+![detailedlog](./Day_5/Images/detailedlog.png)
 
 #### Layout in magic tool post routing
 
@@ -1179,15 +1178,14 @@ run_routing
 ```bash
 magic -T ~/.volare/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.nom.lef def read picorv32.def &
 ```
-![Screenshot from 2023-09-17 17-01-15](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/a99c212b-98d8-4a34-9be8-efe892d3f421)
 
 - We can see the custom cell ```sky130_shant``` being instantiated in the routed layout.
 
-![Screenshot from 2023-09-18 15-26-01](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/8cfdf7df-1ffb-4c55-b119-72cafef60c28)
+![custom_cell](./Day_5/Images/custom_cell.png)
 
 - Now, we try to locate the cell view on the populated layout.
 
-![Screenshot from 2023-09-18 10-20-28](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/e0a598be-aa86-450b-8a63-42583523d9c6)
+![custom_cell_](./Day_5/Images/custom_cell_.png)
 
 
 
