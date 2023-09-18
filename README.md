@@ -66,7 +66,7 @@ This project is done in the course ["Advanced Physical Design using OpenLANE/Sky
        * [ Timing Analysis with Real Clocks using OpenSTA Setup Timing Analysis using Real Clocks](#Timing-Analysis-with-Real-Clocks-using-OpenSTA-Setup-Timing-Analysis-using-Real-Clocks)
             + [Holding Timing Analysis using Real Clock](#Holding-Timing-Analysis-using-Real-Clock)
             + [Lab](#Lab)
--[Day - 5  Final Step for RTL2GDS using tritonRoute and OpenSTA](#Final-Step-for-RTL2GDS-using-tritonRoute-and-OpenSTA)
+- [Day - 5 Final Step for RTL2GDS using tritonRoute and OpenSTA](#Final-Step-for-RTL2GDS-using-tritonRoute-and-OpenSTA)
        * [Routing and Design Rule Check](#Routing-and-Design-Rule-Check)
             + [Maze Routing and Lee's Algorithm](#Maze-Routing-and-Lee's-Algorithm)
             + [Design Rule Check](#Design-Rule-Check)
