@@ -733,8 +733,7 @@ met5 Y 1.70 3.40
   ```
 - Now we see the layout on Magic again.
 
-![Screenshot from 2023-09-16 15-05-56](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/3e04a9a5-e300-4513-a046-bda40e8e4b88)
-
+![Day41](./Day_4/Images/Day41.png)
 - The second condition is also verified. The X-pitch is 0.46 and we can see that the standard cell is 3 times that, thus an odd multiple. 
 - The same can be verified for the height of the standard cell.
 
@@ -749,7 +748,7 @@ met5 Y 1.70 3.40
   - For each layer (to be turned into port), make a box on that particular layer and input a label name along with a sticky label of the layer name with which the port needs to be associated. Ensure the Port enable checkbox is checked and default checkbox is unchecked.
 
 
-![Screenshot from 2023-09-16 15-35-46](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/5045cfe3-0a54-4e4c-ab17-a6f24cd9384f)
+![Day42](./Day_4/Images/Day42.png)
 
   - Port A (input port) and port Y (output port) are taken from locali (local interconnect) layer. Also, the number in the textarea near enable checkbox defines the order in which the ports will be written in LEF file (0 being the first).
   - For power and ground layers, the definition could be same or different than the signal layer. Here, ground and power connectivity are taken from metal1 (Notice the sticky label). 
@@ -779,7 +778,7 @@ met5 Y 1.70 3.40
   port use ground
   ```
 
-![image](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/cdf67c2a-a4c3-4757-9973-07ed07d6388f)
+![Day43](./Day_4/Images/Day43.png)
 
 
 #### Extraction of LEF file
@@ -791,11 +790,11 @@ lef write
 ```
 - Upon checking the directory, we can see the lef file being generated.
 
-![Screenshot from 2023-09-16 16-07-00](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/97aa50cf-1fca-4937-a6ea-d4b0aad4ba12)
+![lef file](./Day_4/Images/lef file.png)
 
 - lef file generated.
 	
- ![Screenshot from 2023-09-16 16-25-14](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/80aa72e4-9706-4593-ad9f-f21685cc463a)
+![lef_in_file](./Day_4/Images/lef_in_file.png)
 
 ***Including Custom Cell ASIC Design***
 - First, we transfer the lef file generated ```sky130_shant.lef``` into the ```/home/shant/OpenLane/designs/picorv32a/src``` directory.
@@ -833,13 +832,14 @@ lef write
   add_lefs -src $lefs
   run_synthesis
   ```
-![Screenshot from 2023-09-16 17-53-30](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/d14f3bd4-00f9-4d8d-bfbb-45581c60f7fa)
+![run_syn_pla_cts](./Day_4/Images/run_syn_pla_cts.png)
 
 - Synthesis log file
-![Screenshot from 2023-09-16 18-12-47](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/8fc35890-e0f4-4d84-8acc-2653a204c9e0)
+![synth_log](./Day_4/Images/synth_log.png)
 
 - Static timing analysis (STA) log file
-![Screenshot from 2023-09-16 18-13-30](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/1a407d3f-d962-44a6-ad52-c4f2a0e2e355)
+  
+![sta_log](./Day_4/Images/sta_log.png)
 
 #### Delay Table
 
@@ -853,7 +853,7 @@ VLSI engineers have identified specific constraints when inserting buffers to pr
 
 When the algorithm works with these delay tables, it utilizes the provided input slew and load capacitance values to compute the corresponding delay values for the buffers. In cases where the precise delay data is not readily available, the algorithm employs a technique of interpolation to determine the closest available data points and extrapolates from them to estimate the required delay values.
 
-![image](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/a800ffa4-5dd7-46d8-9be8-ff0869268807)
+![Day44](./Day_4/Images/Day44.png)
 
 #### Custom Cell inclusion in OpenLane Flow
 
@@ -867,15 +867,15 @@ run_floorplan
 run_placement
 ```
 
-![Screenshot from 2023-09-16 19-19-27](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/0a9eff93-ca66-405e-90f4-f29b91e96e46)
+![run_syn_pla_cts](./Day_4/Images/run_syn_pla_cts.png)
 
 - Now, we check for legality &To check the layout invoke magic from the ```results/placement``` directory
 
-![Screenshot from 2023-09-18 14-53-59](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/9fa0d843-3a9e-4d8d-8b1b-27687ec03f03)
+![custom_cell](./Day_5/Images/custom_cell.png)
 
 - The cell manager shows that the custom cell ```sky130_shant``` has been instantiated. We try to located the cell view now. 
 
-![Screenshot from 2023-09-17 16-27-03](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/2bf77a6a-39bd-4a71-b597-13bbec81ac1d)
+![custom_cell_](./Day_5/Images/custom_cell_.png)
 
 
  
@@ -885,7 +885,7 @@ run_placement
 
 - Right now, we will consider the ideal clocks, thus the clock tree are not yet made.
 - We take a single clock and anlysis launch and capture flops.
-![image](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/b8c29f1b-0f4c-480e-b5da-7a11b4d862b2)
+![Day45](./Day_4/Images/Day45.png)
 
 - In this, we assume that launch flop is triggered at the first posedge of clk and the capture flop recieves the value at the next posedge.
 - Suppose there was some combinational logic between the two, the delay of the logic should be less than the time period of the clock.
@@ -896,7 +896,7 @@ run_placement
 - We look into the capture flop. It is made of multiple gates and muxes, which will have there mosfets, resistances and capacitances.
 - Thus will have delay associated to them.  
 
-![image](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/1c0aa597-e7d9-4fd7-b0ae-20ce1bc81a77)
+![Day46](./Day_4/Images/Day46.png)
 
 - Suppose the flop was developed with 2 muxes as shown. We have to condsider the delays.
 - This affect the combinational logic delay requirement. Now, the clock period T is not avaiable. The capture flop needs some setup time.
@@ -905,7 +905,7 @@ run_placement
 - *Clock Jitter* - clock is generated from PLL which has inbuilt circuit which cells and some logic. There might variations in the clock generation depending upon the ckt. These variations are collectivity known as clock uncertainity. In that jitter is one of the parameter. It is uncertain that clock might come at that exact time withought any deviation.
 - That is why it is called clock_uncertainity Skew, Jitter and Margin comes into clock_uncertainity
 
-![image](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/7f3c072c-14b7-4f30-8748-d8c9e865d2cc)
+![Day47](./Day_4/Images/Day47.png)
 
 #### Post-Synthesis Analysis using OpenSTA
 
@@ -923,7 +923,7 @@ Since clock tree synthesis has not been performed yet, the analysis is with resp
 
 base.sdc is located in ```vsdstdcelldesigns/extras``` directory. So, we copy it into our design folder using ```cp my_base.sdc /home/emil/OpenLane/designs/picorv32a/src/```
 
-![image](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/d2ffb39b-5aee-4ba8-9972-80952d43ceab)
+![my_base_sdc](./Day_4/Images/my_base_sdc.png)
 
 From the timing report, we can improve slack by upsizing the cells i.e., by replacing the cells with high drive strength and we can see significant changes in the slack. Since there were no timing violations, we can skip this step. 
 
@@ -976,13 +976,8 @@ We will continue after the synthesis, floorplan and placement. We run the CTS as
 run_cts
 ```
 
-![image](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/12044892-426c-4c30-ba0f-405e2a7ec5a7)
+![run_syn_pla_cts](./Day_4/Images/run_syn_pla_cts.png)
 
-- Now, we verify the setup and hold time
-
-![image](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/3adae859-7f27-4c68-a170-2b60bfce8b82)
-
-- We note the setup slack as ``` 13.31 ``` and hold slack as ``` 0.35 ```. Therefore, we are not in violation for timing constrints.
    
 ### Timing Analysis with Real Clocks using OpenSTA 
 
@@ -992,7 +987,7 @@ run_cts
 - It pertains to the duration during which a signal must remain steady and valid prior to the arrival of the clock edge.
 - Guaranteeing the fulfillment of setup time prerequisites is vital for averting data errors and securing the correct functioning of the digital circuit.
 
-![image](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/773db2c6-a1c5-4d7e-a92f-a2a43602c6bc)
+![Day48](./Day_4/Images/Day48.png)
 
 
 - To ensure the setup time requirements are met we need to make sure of some things:
@@ -1009,7 +1004,7 @@ run_cts
 - It concerns the minimum duration during which a data input (D) needs to maintain its stability and validity after the clock edge before any changes can occur.
 - Ensuring that hold time requirements are met is essential to prevent data corruption and ensure the proper operation of digital circuits.
 
-![image](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/7a6c57f6-5307-4aea-9324-626f6c665268)
+![Day49](./Day_4/Images/Day49.png)
 
 #### LAB
 
@@ -1031,12 +1026,12 @@ report_checks -path_delay min_max -format full_clock_expanded -digits 4
 - Since, clock is propagated, from this stage, we do timing analysis with real clocks. From now post cts analysis is performed by operoad within the openlane flow
 
 - *Hold Slack*
-![Screenshot from 2023-09-17 15-10-18](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/1160b453-ec66-4c12-81fc-f4c347763730)
+- 
+![hold_slack](./Day_4/Images/hold_slack.png)
 
 - *Setup Slack*
-![Screenshot from 2023-09-17 15-09-40](https://github.com/Shant1R/Advanced-Physical-Design-using-Openlane/assets/59409568/1efc9a1c-542c-49d5-ade2-90e61d1aba2a)
 
-
+![setup_slack](./Day_4/Images/setup_slack.png)
  
 
 
